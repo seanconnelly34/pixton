@@ -26,7 +26,7 @@ const Item = styled(Paper)<{ $color: string }>`
 `;
 
 const BoxStyled = styled(Box)`
-  height: 75vh;
+  height: 72vh;
   overflow-x: scroll;
 `;
 
@@ -37,6 +37,21 @@ const PaginationWrapper = styled.div`
   height: 100px;
 `;
 
+const PaginationStyleWrapper = styled.div`
+  .MuiButtonBase-root {
+    font-size: 30px;
+    color: #0277bd;
+    border: 2px solid #04a9f4;
+  }
+  .Mui-selected {
+    background-color: #0277bd !important;
+    color: white;
+  }
+  .MuiButtonBase-root:hover {
+    background-color: #04a9f4;
+    color: white;
+  }
+`;
 const Main = () => {
   const [page, setPage] = useState(1);
   const [toggleModalSrc, setToggleModalSrc] = useState("");
@@ -96,16 +111,18 @@ const Main = () => {
         </BoxStyled>
       )}
       {!loading && !error && (
-        <PaginationWrapper>
-          <Pagination
-            count={count}
-            size='large'
-            page={page}
-            variant='outlined'
-            shape='rounded'
-            onChange={handlePageChange}
-          />
-        </PaginationWrapper>
+        <PaginationStyleWrapper>
+          <PaginationWrapper>
+            <Pagination
+              count={count}
+              size='large'
+              page={page}
+              variant='outlined'
+              shape='rounded'
+              onChange={handlePageChange}
+            />
+          </PaginationWrapper>
+        </PaginationStyleWrapper>
       )}
     </>
   );
