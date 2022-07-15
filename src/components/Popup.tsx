@@ -1,4 +1,4 @@
-import React from "react";
+import React, { LegacyRef, RefObject } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import styled from "styled-components";
@@ -27,7 +27,13 @@ const ModalStyled = styled(Modal)`
   }
 `;
 
-const Popup = ({ toggleModalSrc, handleToggleModal }) => {
+type TPopup = {
+  forwardRef: RefObject<unknown> | LegacyRef<HTMLImageElement> | undefined;
+  toggleModalSrc: string;
+  handleToggleModal: (arg: string) => void;
+};
+
+const Popup = ({ toggleModalSrc, handleToggleModal }: TPopup) => {
   return (
     <ModalStyled open={!!toggleModalSrc} onClose={() => handleToggleModal("")}>
       <Box>

@@ -1,17 +1,22 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import randomColor from "randomcolor";
+import { ISceneGroups } from "../@types/api/apiScenesGroup";
 
-const useFetchSceneGImages = ({ page }) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [scenes, setScenes] = useState();
+type TGetSceneImages = {
+  page: number;
+};
+
+const useGetSceneImages = ({ page }: TGetSceneImages) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>();
+  const [scenes, setScenes] = useState<ISceneGroups[] | undefined>();
 
   //pagination variables
   const PER_PAGE = 24;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [count, setCount] = useState();
-  const [currentData, setCurrentData] = useState();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [count, setCount] = useState<number>(0);
+  const [currentData, setCurrentData] = useState<ISceneGroups[] | undefined>();
 
   //fetching data
   useEffect(() => {
@@ -23,12 +28,12 @@ const useFetchSceneGImages = ({ page }) => {
         );
         const sceneGroups = response.data.data.sceneGroups;
 
-        sceneGroups.forEach((object) => {
+        sceneGroups.forEach((object: ISceneGroups) => {
           object.color = randomColor();
         });
         setScenes(sceneGroups);
-      } catch (error) {
-        setError(error);
+      } catch (error: unknown) {
+        setError("Failure to fetch data, Please Try Again or contact support");
       }
       setLoading(false);
     };
@@ -63,4 +68,4 @@ const useFetchSceneGImages = ({ page }) => {
   };
 };
 
-export default useFetchSceneGImages;
+export default useGetSceneImages;

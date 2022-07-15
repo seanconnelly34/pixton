@@ -1,4 +1,4 @@
-import React, { useState, createRef } from "react";
+import React, { useState, useRef, ChangeEvent } from "react";
 import useGetSceneImages from "../hooks/useGetSceneImages";
 import { Box, Paper, Grid } from "@mui/material";
 import styled from "styled-components";
@@ -15,7 +15,7 @@ const ProgressWrapper = styled.div`
   align-items: center;
 `;
 
-const Item = styled(Paper)`
+const Item = styled(Paper)<{ $color: string }>`
   && {
     justify-content: center;
     align-items: center;
@@ -40,23 +40,23 @@ const PaginationWrapper = styled.div`
 const Main = () => {
   const [page, setPage] = useState(1);
   const [toggleModalSrc, setToggleModalSrc] = useState("");
-  const imageRef = createRef(null);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const { loading, error, count, currentData } = useGetSceneImages({
     page,
   });
 
-  const handlePageChange = (e, p) => {
+  const handlePageChange = (e: ChangeEvent<unknown>, p: number) => {
     setPage(p);
   };
 
-  const handleToggleModal = (url) => {
+  const handleToggleModal = (url: string) => {
     setToggleModalSrc(url);
   };
 
   return (
     <>
-      {error && <Toast message={error.message} isOpen={true} />}
+      {error && <Toast message={error} isOpen={true} />}
       {loading ? (
         <ProgressWrapper>
           <CircularProgress color='secondary' size={100} />
@@ -70,7 +70,7 @@ const Main = () => {
             style={{ justifyContent: "center" }}
           >
             {currentData &&
-              currentData.map((scene, index) => {
+              currentData.map((scene, index: number) => {
                 return (
                   <Grid item xs={3} sm={4} md={4} key={index}>
                     <Item
