@@ -15,6 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import randomColor from "randomcolor";
 
 const SVGWrapperStyles = styled.span`
+width: 100%:
   svg {
     width: 100%;
     height: 100%;
@@ -114,10 +115,10 @@ const Main = () => {
               currentData.map((scene, index) => (
                 <Grid item xs={3} sm={4} md={4} key={index}>
                   <Item onClick={() => handleToggleModal(scene.url)}>
+                    {/* @ts-ignore */}
                     <SVGWrapperStyles
                       id='svgWrapper'
                       ref={imageRef}
-                      style={{ width: "100%" }}
                       dangerouslySetInnerHTML={{ __html: svgs?.[index] }}
                     />
                   </Item>
