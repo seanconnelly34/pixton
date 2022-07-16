@@ -28,7 +28,11 @@ const ModalStyled = styled(Modal)`
 `;
 
 type TPopup = {
-  forwardRef: RefObject<unknown> | LegacyRef<HTMLImageElement> | undefined;
+  forwardRef:
+    | RefObject<unknown>
+    | HTMLImageElement
+    | LegacyRef<HTMLSpanElement>
+    | undefined;
   toggleModalSrc: string;
   handleToggleModal: (arg: string) => void;
 };

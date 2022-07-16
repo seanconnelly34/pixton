@@ -1,4 +1,10 @@
-import React, { useState, useRef, ChangeEvent } from "react";
+import React, {
+  useState,
+  useRef,
+  ChangeEvent,
+  useEffect,
+  LegacyRef,
+} from "react";
 import useGetSceneImages from "../hooks/useGetSceneImages";
 import { Box, Paper, Grid } from "@mui/material";
 import styled from "styled-components";
@@ -6,6 +12,14 @@ import Pagination from "@mui/material/Pagination";
 import Popup from "../components/Popup";
 import Toast from "../components/Toast";
 import CircularProgress from "@mui/material/CircularProgress";
+import randomColor from "randomcolor";
+
+const SVGWrapperStyles = styled.span`
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
 
 const ProgressWrapper = styled.div`
   height: 100vh;
@@ -15,14 +29,11 @@ const ProgressWrapper = styled.div`
   align-items: center;
 `;
 
-const Item = styled(Paper)<{ $color: string }>`
-  && {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    background-color: ${(props) => props.$color};
-    padding: 10px;
-  }
+const Item = styled(Paper)`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 10px;
 `;
 
 const BoxStyled = styled(Box)`
@@ -55,7 +66,8 @@ const PaginationStyleWrapper = styled.div`
 const Main = () => {
   const [page, setPage] = useState(1);
   const [toggleModalSrc, setToggleModalSrc] = useState("");
-  const imageRef = useRef<HTMLImageElement>(null);
+  const imageRef = useRef<HTMLImageElement | LegacyRef<HTMLSpanElement>>(null);
+  const [svgs, setSVG] = useState<string[] | undefined>();
 
   const { loading, error, count, currentData } = useGetSceneImages({
     page,
@@ -68,6 +80,20 @@ const Main = () => {
   const handleToggleModal = (url: string) => {
     setToggleModalSrc(url);
   };
+
+  useEffect(() => {
+    if (currentData) {
+      Promise.all(
+        currentData.map((scene) => fetch(scene.url).then((res) => res.text()))
+      ).then((data) => {
+        const fillRandom = data.map((svg) => {
+          return svg.replaceAll("fill=", () => `fill="${randomColor()}"`);
+        });
+
+        return setSVG(fillRandom);
+      });
+    }
+  }, [currentData]);
 
   return (
     <>
@@ -85,23 +111,18 @@ const Main = () => {
             style={{ justifyContent: "center" }}
           >
             {currentData &&
-              currentData.map((scene, index: number) => {
-                return (
-                  <Grid item xs={3} sm={4} md={4} key={index}>
-                    <Item
-                      onClick={() => handleToggleModal(scene.url)}
-                      $color={scene.color}
-                    >
-                      <img
-                        ref={imageRef}
-                        style={{ width: "100%" }}
-                        src={scene.url}
-                        alt={scene.url}
-                      />
-                    </Item>
-                  </Grid>
-                );
-              })}
+              currentData.map((scene, index) => (
+                <Grid item xs={3} sm={4} md={4} key={index}>
+                  <Item onClick={() => handleToggleModal(scene.url)}>
+                    <SVGWrapperStyles
+                      id='svgWrapper'
+                      ref={imageRef}
+                      style={{ width: "100%" }}
+                      dangerouslySetInnerHTML={{ __html: svgs?.[index] }}
+                    />
+                  </Item>
+                </Grid>
+              ))}
           </Grid>
           <Popup
             forwardRef={imageRef}

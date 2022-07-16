@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import randomColor from "randomcolor";
 import { ISceneGroups } from "../@types/api/apiScenesGroup";
 
 type TGetSceneImages = {
@@ -28,9 +27,6 @@ const useGetSceneImages = ({ page }: TGetSceneImages) => {
         );
         const sceneGroups = response.data.data.sceneGroups;
 
-        sceneGroups.forEach((object: ISceneGroups) => {
-          object.color = randomColor();
-        });
         setScenes(sceneGroups);
       } catch (error: unknown) {
         setError("Failure to fetch data, Please Try Again or contact support");
