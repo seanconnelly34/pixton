@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 const H6 = styled(Typography)({
   color: "black",
   textAlign: "center",
-  fontSize: "1rem",
 }) as typeof Typography;
 
 const ModalStyled = styled(Modal)`
@@ -31,6 +30,9 @@ const ModalStyled = styled(Modal)`
     width: 100%;
     max-height: 600px;
     max-width: 600px;
+  }
+  .MuiTypography-root {
+    font-size: 1rem;
   }
 `;
 
