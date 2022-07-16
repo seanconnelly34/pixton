@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  ChangeEvent,
-  useEffect,
-  LegacyRef,
-} from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import useGetSceneImages from "../hooks/useGetSceneImages";
 import { Box, Paper, Grid } from "@mui/material";
 import styled from "styled-components";
@@ -15,7 +9,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import randomColor from "randomcolor";
 
 const SVGWrapperStyles = styled.span`
-width: 100%:
+  width: 100%;
   svg {
     width: 100%;
     height: 100%;
@@ -64,10 +58,10 @@ const PaginationStyleWrapper = styled.div`
     color: white;
   }
 `;
+
 const Main = () => {
   const [page, setPage] = useState(1);
   const [toggleModalSrc, setToggleModalSrc] = useState("");
-  const imageRef = useRef<HTMLImageElement | LegacyRef<HTMLSpanElement>>(null);
   const [svgs, setSVG] = useState<string[] | undefined>();
 
   const { loading, error, count, currentData } = useGetSceneImages({
@@ -115,10 +109,9 @@ const Main = () => {
               currentData.map((scene, index) => (
                 <Grid item xs={3} sm={4} md={4} key={index}>
                   <Item onClick={() => handleToggleModal(scene.url)}>
-                    {/* @ts-ignore */}
                     <SVGWrapperStyles
                       id='svgWrapper'
-                      ref={imageRef}
+                      /* @ts-ignore */
                       dangerouslySetInnerHTML={{ __html: svgs?.[index] }}
                     />
                   </Item>
@@ -126,7 +119,6 @@ const Main = () => {
               ))}
           </Grid>
           <Popup
-            forwardRef={imageRef}
             toggleModalSrc={toggleModalSrc}
             handleToggleModal={handleToggleModal}
           />

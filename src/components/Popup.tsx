@@ -1,7 +1,14 @@
-import React, { LegacyRef, RefObject } from "react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import styled from "styled-components";
+import Typography from "@mui/material/Typography";
+
+const H6 = styled(Typography)({
+  color: "black",
+  textAlign: "center",
+  fontSize: "1rem",
+}) as typeof Typography;
 
 const ModalStyled = styled(Modal)`
   .MuiBox-root {
@@ -28,11 +35,6 @@ const ModalStyled = styled(Modal)`
 `;
 
 type TPopup = {
-  forwardRef:
-    | RefObject<unknown>
-    | HTMLImageElement
-    | LegacyRef<HTMLSpanElement>
-    | undefined;
   toggleModalSrc: string;
   handleToggleModal: (arg: string) => void;
 };
@@ -42,6 +44,9 @@ const Popup = ({ toggleModalSrc, handleToggleModal }: TPopup) => {
     <ModalStyled open={!!toggleModalSrc} onClose={() => handleToggleModal("")}>
       <Box>
         <img src={toggleModalSrc} alt={toggleModalSrc} />
+        <H6 variant='h6' component='div' gutterBottom>
+          Original
+        </H6>
       </Box>
     </ModalStyled>
   );
