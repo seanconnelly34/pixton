@@ -76,13 +76,15 @@ const Main = () => {
     setToggleModalSrc(url);
   };
 
+
   useEffect(() => {
+    const regex = /fill=(.{9})/gi;
     if (currentData) {
       Promise.all(
         currentData.map((scene) => fetch(scene.url).then((res) => res.text()))
       ).then((data) => {
         const fillRandom = data.map((svg) => {
-          return svg.replaceAll("fill=", () => `fill="${randomColor()}"`);
+          return svg.replaceAll(regex, () => `fill="${randomColor()}"`);
         });
 
         return setSVG(fillRandom);
